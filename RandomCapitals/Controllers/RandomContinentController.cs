@@ -22,22 +22,16 @@ namespace RandomContinent.Controllers
         {
             return Ok(new { Player1 = player1, Player2 = player2 });
         }
-        [HttpGet]
-        public IActionResult RandomContinent()
-        {
-            var coordinates = _randomContinent.GenerateRandomCoordinates();
-            return Ok(new { Player1Coordinates = coordinates[0], Player2Coordinates = coordinates[1] });
-        }
         [HttpPost]
         public IActionResult CreatePlayer(CreatePlayerRequest model)
         {
             if (ModelState.IsValid)
             {
                 player1.Name = model.Player1;
-                player1.Continent = model.Player1Continent;
+                player1.Continent = _randomContinent.GenerateRandomCoordinates();
 
                 player2.Name = model.Player2;
-                player2.Continent = model.Player2Continent;
+                player2.Continent = _randomContinent.GenerateRandomCoordinates();
                 return Ok(new { Player1 = player1, Player2 = player2 }); 
             }
             return BadRequest("Modelstate not valid");
