@@ -10,12 +10,17 @@ namespace RandomContinent.Controllers
     public class RandomContinentController : ControllerBase
     {
         private readonly RandomContinentService _randomContinent;
-        public Player player1 = new Player();
-        public Player player2 = new Player();
+        public static Player player1 = new Player();
+        public static Player player2 = new Player();
 
         public RandomContinentController(RandomContinentService randomContinent)
         {
              _randomContinent = randomContinent;
+        }
+        [HttpGet("Get")]
+        public IActionResult GetPlayers()
+        {
+            return Ok(new { Player1 = player1, Player2 = player2 });
         }
         [HttpGet]
         public IActionResult RandomContinent()
@@ -36,6 +41,18 @@ namespace RandomContinent.Controllers
                 return Ok(new { Player1 = player1, Player2 = player2 }); 
             }
             return BadRequest("Modelstate not valid");
+        }
+        [HttpPut("Player1Money")]
+        public IActionResult Player1Money(int amount)
+        {
+            player1.Money = player1.Money + amount;
+            return Ok(player1);
+        }
+        [HttpPut("Player2Money")]
+        public IActionResult DecreasePlayer1Money(int amount)
+        {
+            player2.Money = player1.Money + amount;
+            return Ok(player2);
         }
 
 

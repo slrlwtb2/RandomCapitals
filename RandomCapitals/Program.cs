@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<RandomContinentService>();
+builder.Services.AddSingleton<RandomContinentService>();
 
 var app = builder.Build();
 
