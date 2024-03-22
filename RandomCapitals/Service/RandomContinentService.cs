@@ -1,4 +1,7 @@
-﻿namespace RandomContinent.Service
+﻿using RandomCapitals.Model;
+using RandomContinent.Model;
+
+namespace RandomContinent.Service
 {
     public class RandomContinentService
     {
@@ -11,6 +14,9 @@
             int[] coordinates = new int[] { x1, y1 };
             return coordinates;
         }
-
+        public List<OwnCoordinate> GetOwnRegion(Player player)
+        {
+            return player.MyCoordinates.ToList();
+        }
     }
 }
