@@ -43,6 +43,7 @@ namespace RandomContinent.Controllers
         {
             if (ModelState.IsValid)
             {
+                player1 = new Player();
                 player1.Name = model.Player1;
                 player1.Continent = _randomContinent.GenerateRandomCoordinates();
                 OwnCoordinate mainCity1 = new OwnCoordinate()
@@ -52,6 +53,7 @@ namespace RandomContinent.Controllers
                 };
                 player1.MyCoordinates.Add(mainCity1);
 
+                player2 = new Player();
                 player2.Name = model.Player2;
                 player2.Continent = _randomContinent.GenerateRandomCoordinates();
                 OwnCoordinate mainCity2 = new OwnCoordinate()
@@ -170,7 +172,7 @@ namespace RandomContinent.Controllers
             }
         }
 
-        [HttpPost("AddInterest")]
+        [HttpGet("AddInterest")]
         public IActionResult AddInterest(string player)
         {
             if (player == "Player 1")
