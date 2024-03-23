@@ -38,7 +38,7 @@ namespace RandomContinent.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpPost("CreatePlayer")]
         public IActionResult CreatePlayer(CreatePlayerRequest model)
         {
             if (ModelState.IsValid)
@@ -127,6 +127,47 @@ namespace RandomContinent.Controllers
             }
         }
 
+        [HttpPost("AttackRegion")]
+        public IActionResult AttackRegion(string player, AttackReiognRequest model)
+        {
+            if (player == "Player 1")
+            {
+                var player1RegionList = _randomContinent.GetOwnRegion(player1);
+                var player2RegionList = _randomContinent.GetOwnRegion(player2);
+                var player1AdjacenRegion = player1.FindAdjacentCoordinates();
+                if (!player1RegionList.Any(x => x.Coordinates.SequenceEqual(model.MyRegion))) return BadRequest("You can only use attack command on your own region");
+                if (!player2RegionList.Any(x => x.Coordinates.SequenceEqual(model.AttackRegion))) return BadRequest("You can only attack enemy region");
+                if (!player1AdjacenRegion.Any(x => x.SequenceEqual(model.AttackRegion))) return BadRequest("You can only attack adjacen Region");
 
+                var attackerRegion = player1RegionList.First(x => x.Coordinates.SequenceEqual(model.MyRegion));
+                var defenderRegion = player2RegionList.First(x => x.Coordinates.SequenceEqual(model.AttackRegion));
+                if (attackerRegion.Power <= defenderRegion.Power)
+                {
+                    return BadRequest("You can only region that has lower power");
+                }
+                player1.MyCoordinates.Add(defenderRegion);
+                player2.MyCoordinates.Remove(defenderRegion);
+                return Ok(player1.MyCoordinates);
+            }
+            else
+            {
+                var player1RegionList = _randomContinent.GetOwnRegion(player1);
+                var player2RegionList = _randomContinent.GetOwnRegion(player2);
+                var player2AdjacenRegion = player2.FindAdjacentCoordinates();
+                if (!player2RegionList.Any(x => x.Coordinates.SequenceEqual(model.MyRegion))) return BadRequest("You can only use attack command on your own region");
+                if (!player1RegionList.Any(x => x.Coordinates.SequenceEqual(model.AttackRegion))) return BadRequest("You can only attack enemy region");
+                if (!player2AdjacenRegion.Any(x => x.SequenceEqual(model.AttackRegion))) return BadRequest("You can only attack adjacen Region");
+
+                var attackerRegion = player2RegionList.First(x => x.Coordinates.SequenceEqual(model.MyRegion));
+                var defenderRegion = player1RegionList.First(x => x.Coordinates.SequenceEqual(model.AttackRegion));
+                if (attackerRegion.Power <= defenderRegion.Power)
+                {
+                    return BadRequest("You can only region that has lower power");
+                }
+                player2.MyCoordinates.Add(defenderRegion);
+                player1.MyCoordinates.Remove(defenderRegion);
+                return Ok(player2.MyCoordinates);
+            }
+        }
     }
 }
