@@ -169,5 +169,17 @@ namespace RandomContinent.Controllers
                 return Ok(player2.MyCoordinates);
             }
         }
+
+        [HttpPost("AddInterest")]
+        public IActionResult AddInterest(string player)
+        {
+            if (player == "Player 1")
+            {
+                player1.Money += (player1.Money * 10) / 100;
+                return Ok(player1.Money);
+            }
+            player2.Money += (player2.Money * 10) / 100;
+            return Ok(player2.Money);
+        }
     }
 }
